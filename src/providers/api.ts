@@ -1,20 +1,16 @@
 import axios from 'axios';
 import Config from 'react-native-config';
 
-import {getToken} from 'src/utils/auth';
-
 const api = axios.create({
-  baseURL: Config.API_URL,
+  // baseURL: Config.API_URL,
 });
 
 api.interceptors.request.use(async ({headers, ...config}) => {
-  const token = await getToken();
 
   return {
     ...config,
     headers: {
-      ...headers,
-      ...(token && {Authorization: `Bearer ${token}`}),
+      ...headers
     },
   };
 });
