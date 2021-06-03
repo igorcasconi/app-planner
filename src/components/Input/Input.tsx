@@ -1,4 +1,4 @@
-import {TextInputProps} from 'react-native';
+import {TextInputProps} from 'react-native'
 import {
   space,
   layout,
@@ -7,9 +7,9 @@ import {
   SpaceProps,
   LayoutProps,
   TypographyProps,
-  ColorProps,
-} from 'styled-system';
-import styled from 'styled-components/native';
+  ColorProps
+} from 'styled-system'
+import styled from 'styled-components/native'
 
 type Props = SpaceProps &
   LayoutProps &
@@ -20,8 +20,8 @@ type Props = SpaceProps &
 const InputComponent: React.FC<Props> = styled.TextInput.attrs(
   (props: Props) => ({
     autoCapitalize: 'none',
-    ...props,
-  }),
+    ...props
+  })
 )`
   border: 1px solid black;
   color: black;
@@ -31,6 +31,6 @@ const InputComponent: React.FC<Props> = styled.TextInput.attrs(
   ${layout}
   ${typography}
   ${color}
-`;
+`
 
-export default InputComponent;
+export default InputComponent

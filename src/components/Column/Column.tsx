@@ -1,4 +1,4 @@
-import {ViewProps} from 'react-native';
+import {ViewProps} from 'react-native'
 import {
   flexbox,
   space,
@@ -7,9 +7,9 @@ import {
   FlexboxProps,
   SpaceProps,
   LayoutProps,
-  ColorProps,
-} from 'styled-system';
-import styled from 'styled-components/native';
+  ColorProps
+} from 'styled-system'
+import styled from 'styled-components/native'
 
 export type Props = FlexboxProps &
   SpaceProps &
@@ -22,6 +22,6 @@ const ColumnComponent: React.FC<Props> = styled.View`
   ${space}
   ${layout}
   ${color}
-`;
+`
 
-export default ColumnComponent;
+export default ColumnComponent

@@ -1,7 +1,7 @@
 export default {
   colors: {
-    black: '#000e1a',
-    white: '#fff',
-    blue: '#007ce0',
-  },
-};
+    vividAzure: '#1573db',
+    veryLightGray: '#f2f2f2',
+    white: '#fff'
+  }
+}
