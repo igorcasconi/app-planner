@@ -1,4 +1,4 @@
-package com.reactnativenavetemplatetypescript;
+package com.appplanner;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "reactNativeNaveTemplateTypescript";
+    return "appPlanner";
   }
 }

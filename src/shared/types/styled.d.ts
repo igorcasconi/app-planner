@@ -1,9 +1,9 @@
 declare module 'styled-components' {
   export interface DefaultTheme {
     colors: {
-      black: string;
-      white: string;
-      blue: string;
-    };
+      vividAzure: string
+      veryLightGray: string
+      white: string
+    }
   }
 }

@@ -1,11 +1,11 @@
-import React, { Fragment } from 'react';
+import React, { Fragment } from 'react'
 
-import HomeStack from './HomeStack';
+import HomeStack from './HomeStack'
 
 const Routes = () => (
   <Fragment>
     <HomeStack />
   </Fragment>
-);
+)
 
-export default Routes;
+export default Routes
