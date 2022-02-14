@@ -1,87 +1,65 @@
 import React from 'react'
 import { FlatList } from 'react-native'
-import LinearGradient from 'react-native-linear-gradient'
-import styled from 'styled-components/native'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
-import { Column, Row, Text, WeekCalendar } from 'src/components'
+import { Button, Column, GradientView, Row, Text, WeekCalendar } from 'src/components'
 import { EventCard } from 'src/components/EventCard'
 
 import { EventProps } from 'src/shared/interfaces/events'
-import { useColors } from 'src/hooks/useColors'
-
-const data = [
-  {
-    eventName: 'Reunião Formatura',
-    color: 'vividAzure',
-    date: new Date(),
-    place: 'Discord'
-  },
-  {
-    eventName: 'Reunião Formatura',
-    color: 'pink',
-    date: new Date(),
-    place: 'Discord'
-  },
-  {
-    eventName: 'Reunião Formatura',
-    color: 'slateBlue',
-    date: new Date(),
-    place: 'Discord'
-  },
-  {
-    eventName: 'Reunião Formatura',
-    color: 'vividAzure',
-    date: new Date(),
-    place: 'Discord'
-  },
-  {
-    eventName: 'Reunião Formatura',
-    color: 'vividAzure',
-    date: new Date(),
-    place: 'Discord'
-  }
-]
+import { useNavigation } from '@react-navigation/native'
+import { data } from 'src/utils/event'
 
 const Home: React.FC = () => {
-  const getThemeColors = useColors()
+  const navigation = useNavigation()
+
   return (
-    <Column backgroundColor='veryLightGray' height='100%' flex={1}>
-      <ViewGradient
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-        locations={[0, 0.8, 1]}
-        colors={[getThemeColors('lightGrey'), getThemeColors('gray99'), getThemeColors('secondWhite')]}
-      >
-        <Column width={1} height={220} px={10} py={20}>
-          <Row width={1}>
-            <Text fontSize={18} fontWeight='bold' color='veryDarkGray'>
-              PLANNER APP
-            </Text>
-          </Row>
-          <Row width={1}>
-            <Text fontSize={24} fontWeight='bold' color='lightBlack'>
-              SEMANA
-            </Text>
+    <Column backgroundColor='veryLightGray' flex={1}>
+      <GradientView colorsTheme={['lightGrey', 'gray99', 'secondWhite']}>
+        <Column width={1} height={200} px={10} py={20}>
+          <Row width={1} height={40} justifyContent='space-between'>
+            <Column>
+              <Text fontSize={18} fontWeight='bold' color='veryDarkGray'>
+                PLANNER APP
+              </Text>
+              <Row width={1}>
+                <Text fontSize={24} fontWeight='bold' color='lightBlack'>
+                  SEMANA
+                </Text>
+              </Row>
+            </Column>
+            <Row height={20}>
+              <Button width={80} height={40} pt='10px' backgroundColor='vividAzure' mr={10}>
+                <Text fontSize={12} lineHeight='12px' color='white' fontFamily='Nunito-SemiBold' textAlign='center'>
+                  Adicionar evento
+                </Text>
+              </Button>
+              <Button
+                backgroundColor='lightGrey'
+                width={40}
+                height={40}
+                onPress={() => navigation.navigate('Calendar')}
+              >
+                <Ionicons name='today' color='black' size={20} />
+              </Button>
+            </Row>
           </Row>
           <Row width={1} mt={16}>
             <WeekCalendar />
           </Row>
         </Column>
-      </ViewGradient>
-      <Row width={1} height='100%' flex={1}>
-        <FlatList
-          data={data}
-          keyExtractor={(item, index) => `${item.eventName}-${index}`}
-          renderItem={({ item }: { item: EventProps }) => <EventCard item={item} />}
-        />
-      </Row>
+        <Row width={1} justifyContent='center' alignItems='center' height={20} mb={10}>
+          <Text fontSize={16} color='black'>
+            Próximos eventos do dia
+          </Text>
+        </Row>
+      </GradientView>
+      <FlatList
+        data={data}
+        keyExtractor={(item, index) => `${item.eventName}-${index}`}
+        renderItem={({ item }: { item: EventProps }) => <EventCard item={item} />}
+      />
     </Column>
   )
 }
-
-const ViewGradient = styled(LinearGradient)`
-  width: 100%;
-  height: 220px;
-`
 
 export default Home
