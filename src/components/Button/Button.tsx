@@ -9,13 +9,13 @@ type Props = SpaceProps &
   LayoutProps &
   ColorProps &
   TouchableOpacityProps & {
-    text: string
-    isLoading: boolean
+    text?: string
+    isLoading?: boolean
   }
 
-const ButtonComponent: React.FC<Props> = ({ text, isLoading, disabled, ...props }) => (
+const ButtonComponent: React.FC<Props> = ({ text, isLoading, disabled, children, ...props }) => (
   <Button disabled={isLoading || disabled} {...props}>
-    {isLoading ? <Loader /> : <Text>{text}</Text>}
+    {isLoading ? <Loader /> : text ? <Text>{text}</Text> : children}
   </Button>
 )
 

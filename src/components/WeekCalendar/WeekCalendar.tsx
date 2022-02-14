@@ -56,7 +56,13 @@ const WeekCalendar: React.FC = () => {
     <Column width={1}>
       <Row width={1} px={10} justifyContent='center' alignItems='center'>
         {week.map((item, index) => (
-          <TouchableOpacity key={index} onPress={() => selectDateHandler(index)}>
+          <TouchableOpacity
+            key={index}
+            onPress={() => {
+              console.log('clicou')
+              selectDateHandler(index)
+            }}
+          >
             <Column justifyContent='center' alignItems='center' px={1} width={60} height={130} py={3}>
               <ActiveDate
                 {...(activeDate === index && {
