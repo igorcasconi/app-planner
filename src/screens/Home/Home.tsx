@@ -1,16 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FlatList } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import { useNavigation } from '@react-navigation/native'
 
 import { Button, Column, GradientView, Row, Text, WeekCalendar } from 'src/components'
 import { EventCard } from 'src/components/EventCard'
+import CreateEvent from './CreateEvent'
 
-import { EventProps } from 'src/shared/interfaces/events'
-import { useNavigation } from '@react-navigation/native'
+import { EventsProps } from 'src/shared/interfaces/events'
 import { data } from 'src/utils/event'
 
 const Home: React.FC = () => {
   const navigation = useNavigation()
+  const [openModal, setOpenModal] = useState<boolean>(false)
 
   return (
     <Column backgroundColor='veryLightGray' flex={1}>
@@ -28,7 +30,14 @@ const Home: React.FC = () => {
               </Row>
             </Column>
             <Row height={20}>
-              <Button width={80} height={40} pt='10px' backgroundColor='vividAzure' mr={10}>
+              <Button
+                width={80}
+                height={40}
+                pt='10px'
+                backgroundColor='vividAzure'
+                mr={10}
+                onPress={() => setOpenModal(!openModal)}
+              >
                 <Text fontSize={12} lineHeight='12px' color='white' fontFamily='Nunito-SemiBold' textAlign='center'>
                   Adicionar evento
                 </Text>
@@ -55,9 +64,11 @@ const Home: React.FC = () => {
       </GradientView>
       <FlatList
         data={data}
-        keyExtractor={(item, index) => `${item.eventName}-${index}`}
-        renderItem={({ item }: { item: EventProps }) => <EventCard item={item} />}
+        keyExtractor={(item, index) => `${item.name}-${index}`}
+        renderItem={({ item }: { item: EventsProps }) => <EventCard item={item} />}
       />
+
+      <CreateEvent openModal={openModal} setOpenModal={setOpenModal} />
     </Column>
   )
 }

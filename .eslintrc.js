@@ -32,7 +32,9 @@ module.exports = {
     'prettier/prettier': 2,
     'space-before-function-paren': 0,
     'react/prop-types': 'off',
+    'react/jsx-no-undef': 'off',
     '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^_', argsIgnorePattern: '^_' }],
-    '@typescript-eslint/explicit-function-return-type': 'off'
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    'react/jsx-fragments': 'off'
   }
 }

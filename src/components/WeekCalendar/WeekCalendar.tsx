@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { addDays, eachDayOfInterval, startOfWeek } from 'date-fns'
 import styled from 'styled-components/native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { utcToZonedTime, format, toDate } from 'date-fns-tz'
+import { format, toDate } from 'date-fns-tz'
 import * as Animatable from 'react-native-animatable'
 
 import { Column } from '../Column'
@@ -21,7 +21,7 @@ const animationDate = {
     width: '60%'
   },
   to: {
-    backgroundColor: 'white',
+    backgroundColor: '#E34280',
     height: '90%',
     elevation: 5,
     marginTop: 17,
@@ -33,7 +33,7 @@ const animationDate = {
 const WeekCalendar: React.FC = () => {
   const [activeDate, setActiveDate] = useState<number>(0)
   const { timeZone, languageTag } = useUserConfig()
-  const currentDay = utcToZonedTime(new Date(), timeZone)
+  const currentDay = new Date()
 
   const week = useMemo(() => {
     const initialDayWeek = startOfWeek(currentDay, { weekStartsOn: 1 })
@@ -55,40 +55,44 @@ const WeekCalendar: React.FC = () => {
   return (
     <Column width={1}>
       <Row width={1} px={10} justifyContent='center' alignItems='center'>
-        {week.map((item, index) => (
-          <TouchableOpacity
-            key={index}
-            onPress={() => {
-              console.log('clicou')
-              selectDateHandler(index)
-            }}
-          >
-            <Column justifyContent='center' alignItems='center' px={1} width={60} height={130} py={3}>
-              <ActiveDate
-                {...(activeDate === index && {
-                  animation: animationDate
-                })}
-              >
-                {activeDate === index && (
-                  <Row mt={10} mb={9}>
-                    <Text fontSize={14} fontWeight='bold'>
-                      {format(item, 'E', { timeZone, locale: getLocaleFromString(languageTag) })}
+        {week.map((item, index) => {
+          const activeTextColor = activeDate === index ? 'white' : 'black'
+          return (
+            <TouchableOpacity
+              key={index}
+              onPress={() => {
+                selectDateHandler(index)
+              }}
+            >
+              <Column justifyContent='center' alignItems='center' px={1} width={60} height={130} py={3}>
+                <ActiveDate
+                  {...(activeDate === index && {
+                    animation: animationDate
+                  })}
+                >
+                  {activeDate === index && (
+                    <Row mt={10} mb={9}>
+                      <Text fontSize={14} fontWeight='bold' color={activeTextColor}>
+                        {format(item, 'E', { timeZone, locale: getLocaleFromString(languageTag) })}
+                      </Text>
+                    </Row>
+                  )}
+                  <Row mb={9}>
+                    <Text fontSize={16} color={activeTextColor}>
+                      {format(item, 'dd')}
                     </Text>
                   </Row>
-                )}
-                <Row mb={9}>
-                  <Text fontSize={16}>{format(item, 'dd')}</Text>
-                </Row>
 
-                {activeDate !== index && (
-                  <Text fontSize={12} fontWeight='normal'>
-                    {format(item, 'E', { timeZone, locale: getLocaleFromString(languageTag) })}
-                  </Text>
-                )}
-              </ActiveDate>
-            </Column>
-          </TouchableOpacity>
-        ))}
+                  {activeDate !== index && (
+                    <Text fontSize={12} fontWeight='normal'>
+                      {format(item, 'E', { timeZone, locale: getLocaleFromString(languageTag) })}
+                    </Text>
+                  )}
+                </ActiveDate>
+              </Column>
+            </TouchableOpacity>
+          )
+        })}
       </Row>
     </Column>
   )
