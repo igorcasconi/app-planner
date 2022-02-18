@@ -1,32 +1,32 @@
 export const data = [
   {
-    eventName: 'Reunião Formatura',
-    color: 'vividAzure',
-    date: new Date(),
+    name: 'Reunião Formatura',
+    colorCard: 'vividAzure',
+    dateTime: new Date(),
     place: 'Discord'
   },
   {
-    eventName: 'Reunião Formatura',
-    color: 'pink',
-    date: new Date(),
+    name: 'Reunião Formatura',
+    colorCard: 'pink',
+    dateTime: new Date(),
     place: 'Discord'
   },
   {
-    eventName: 'Reunião Formatura',
-    color: 'slateBlue',
-    date: new Date(),
+    name: 'Reunião Formatura',
+    colorCard: 'slateBlue',
+    dateTime: new Date(),
     place: 'Discord'
   },
   {
-    eventName: 'Reunião Formatura',
-    color: 'vividAzure',
-    date: new Date(),
+    name: 'Reunião Formatura',
+    colorCard: 'vividAzure',
+    dateTime: new Date(),
     place: 'Discord'
   },
   {
-    eventName: 'Reunião Formatura',
-    color: 'vividAzure',
-    date: new Date(),
+    name: 'Reunião Formatura',
+    colorCard: 'vividAzure',
+    dateTime: new Date(),
     place: 'Discord'
   }
 ]

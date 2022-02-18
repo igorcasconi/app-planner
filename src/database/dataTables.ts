@@ -2,8 +2,11 @@ export const EventSchema = {
   name: 'Event',
   properties: {
     name: 'string',
-    description: 'string',
-    date: 'date',
+    description: { type: 'string', optional: true },
+    dateTime: 'date',
+    place: 'string',
+    alert: 'bool',
+    colorCard: 'string',
     index: 'int'
   }
 }

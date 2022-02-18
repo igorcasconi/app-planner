@@ -2,6 +2,7 @@ import React from 'react'
 import { StatusBar } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { ThemeProvider } from 'styled-components/native'
+import { PortalProvider } from '@gorhom/portal'
 
 import { Routes } from 'src/navigators'
 import theme from 'src/theme'
@@ -14,13 +15,15 @@ const App = () => {
     <AreaView>
       <ThemeProvider theme={theme}>
         <StatusBar barStyle='dark-content' />
-        {/* <RealmProvider> */}
-        <UserConfigProvider>
-          <NavigationContainer>
-            <Routes />
-          </NavigationContainer>
-        </UserConfigProvider>
-        {/* </RealmProvider> */}
+        <PortalProvider>
+          <RealmProvider>
+            <UserConfigProvider>
+              <NavigationContainer>
+                <Routes />
+              </NavigationContainer>
+            </UserConfigProvider>
+          </RealmProvider>
+        </PortalProvider>
       </ThemeProvider>
     </AreaView>
   )
