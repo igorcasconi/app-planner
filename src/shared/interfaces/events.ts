@@ -15,4 +15,5 @@ export interface EventsProps {
   place: string
   index?: number
   description?: string
+  isCalendar?: boolean
 }
