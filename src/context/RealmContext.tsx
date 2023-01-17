@@ -1,3 +1,4 @@
+import { isSameDay } from 'date-fns'
 import React, { createContext, useState, useContext, useEffect } from 'react'
 import Realm from 'realm'
 
@@ -8,6 +9,7 @@ interface ContextProps {
   realm: Realm | null
   createEvent: (payload?: EventsProps) => void
   getNextIndex: () => number
+  getCurrentEventsOfDay: (day: Date | null) => EventsProps[]
 }
 
 const RealmContext = createContext<ContextProps>({} as ContextProps)
@@ -46,12 +48,20 @@ const RealmProvider: React.FC = ({ children }) => {
     })
   }
 
+  const getCurrentEventsOfDay = (day: Date | null) => {
+    if (!day) return []
+    const events = realm?.objects('Event').toJSON() as EventsProps[]
+    const currentEventDay = events?.filter(event => isSameDay(event.dateTime, day))
+    return currentEventDay
+  }
+
   return (
     <RealmContext.Provider
       value={{
         realm,
         createEvent,
-        getNextIndex
+        getNextIndex,
+        getCurrentEventsOfDay
       }}
     >
       {children}

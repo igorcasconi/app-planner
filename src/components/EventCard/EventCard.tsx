@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled, { css } from 'styled-components/native'
 import * as Animatable from 'react-native-animatable'
 
@@ -9,22 +9,26 @@ import { useUserConfig } from 'src/context'
 import { EventsProps } from 'src/shared/interfaces/events'
 import { formatDateTZ } from 'src/utils'
 import { useColors } from 'src/hooks/useColors'
+import { compareAsc } from 'date-fns'
 
 const EventCard = ({ item }: { item: EventsProps }) => {
   const { languageTag } = useUserConfig()
   const getThemeColors = useColors()
+  const today = new Date()
+
+  const backgroundColor = useMemo(() => {
+    const timeHasPassed = compareAsc(today, item.dateTime)
+    const themeColor = getThemeColors(item.colorCard)
+    const color = timeHasPassed >= 1 && !item.isCalendar ? themeColor + 80 : themeColor
+    return color
+  }, [item])
 
   return (
     <Row ml={80}>
-      <Card animation='bounceInRight' duration={4000} backgroundColor={getThemeColors(item.colorCard)}>
+      <Card animation='bounceInRight' duration={2000} backgroundColor={backgroundColor}>
         <Row width={1} mb={0.5}>
           <Text fontSize={22} fontWeight={600} color='white'>
             {item.name}
-          </Text>
-        </Row>
-        <Row width={1}>
-          <Text fontSize={14} color='white'>
-            {item.dateTime && formatDateTZ(item.dateTime, 'dd MMMM yyyy', languageTag)}
           </Text>
         </Row>
         <Row width={1}>
