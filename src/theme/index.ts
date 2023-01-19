@@ -9,6 +9,7 @@ export default {
     lightBlack: '#252525',
     pink: '#E34280',
     slateBlue: '#6A5ACD',
-    gray99: '#fcfcfc'
+    gray99: '#fcfcfc',
+    greenCheck: '#41c92c'
   }
 }

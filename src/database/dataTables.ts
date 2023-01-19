@@ -7,6 +7,7 @@ export const EventSchema = {
     place: 'string',
     alert: 'bool',
     colorCard: 'string',
-    index: 'int'
+    index: 'int',
+    done: 'bool'
   }
 }

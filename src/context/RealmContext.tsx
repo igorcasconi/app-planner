@@ -43,7 +43,8 @@ const RealmProvider: React.FC = ({ children }) => {
         place: payload?.place,
         alert: true,
         colorCard: payload?.colorCard,
-        index: nextIndex
+        index: nextIndex,
+        done: false
       })
     })
   }
