@@ -16,4 +16,5 @@ export interface EventsProps {
   index?: number
   description?: string
   isCalendar?: boolean
+  done?: boolean
 }

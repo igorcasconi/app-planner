@@ -28,10 +28,15 @@ const Home: React.FC = () => {
 
   const scrollToNextItem = useCallback(() => {
     if (!selectedDay) return
+
     const today = new Date(selectedDay)
-    const indexNextDate = isToday(selectedDay)
-      ? eventData?.findIndex(event => compareDesc(today, event.dateTime) === 1)
-      : 0
+    const indexEvent = eventData?.findIndex(event => compareDesc(today, event.dateTime) === 1)
+    let indexNextDate
+
+    if (isToday(selectedDay) && !!eventData?.length && indexEvent === -1) indexNextDate = eventData?.length - 1
+    else if (isToday(selectedDay) && indexEvent <= eventData?.length - 1) indexNextDate = indexEvent
+    else indexNextDate = 0
+
     eventListRef.current?.scrollToIndex({ animated: true, index: indexNextDate, viewOffset: 1 })
   }, [eventData])
 
