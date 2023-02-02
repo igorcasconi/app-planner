@@ -15,16 +15,18 @@ import { useColors } from 'src/hooks/useColors'
 
 const Home: React.FC = () => {
   const navigation = useNavigation()
-  const { getCurrentEventsOfDay } = useRealm()
+  const { getCurrentEventsOfDay, setEventAsDone } = useRealm()
   const getThemeColors = useColors()
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [selectedDay, selectDay] = useState<Date | null>(null)
   const eventListRef = useRef<FlatList>(null)
+  const [updateEventList, setUpdateEventList] = useState<boolean>(false)
 
   const eventData = useMemo(() => {
     const events = getCurrentEventsOfDay(selectedDay)
+    setUpdateEventList(false)
     return events
-  }, [selectedDay])
+  }, [selectedDay, updateEventList])
 
   const scrollToNextItem = useCallback(() => {
     if (!selectedDay) return
@@ -103,7 +105,9 @@ const Home: React.FC = () => {
           data={eventData}
           keyExtractor={(item, index) => `${item.name}-${index}`}
           ref={eventListRef}
-          renderItem={({ item }: { item: EventsProps }) => <EventCard item={item} />}
+          renderItem={({ item }: { item: EventsProps }) => (
+            <EventCard item={{ ...item, setEventAsDone, setUpdateEventList }} />
+          )}
           initialNumToRender={20}
           onScrollToIndexFailed={scroll => scrollToIndexFailed(scroll)}
         />
@@ -111,12 +115,12 @@ const Home: React.FC = () => {
         <Column width={1} height='100%' alignItems='center' mt={60} px={50}>
           <MaterialCommunityIcons name='calendar-check' color={getThemeColors('veryDarkGray')} size={100} />
           <Text fontSize={16} color='veryDarkGray' textAlign='center'>
-            Os eventos dessa data já estão concluídos ou não tem nenhum para ser feito!
+            Não tem nenhum evento cadastrado para esse dia!
           </Text>
         </Column>
       )}
 
-      <CreateEvent openModal={openModal} setOpenModal={setOpenModal} />
+      <CreateEvent openModal={openModal} setOpenModal={setOpenModal} setUpdateEventList={setUpdateEventList} />
     </Column>
   )
 }
