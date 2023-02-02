@@ -13,6 +13,7 @@ import { EventSchema } from 'src/schemas/events'
 interface CreateEventProps {
   openModal: boolean
   setOpenModal: Dispatch<SetStateAction<boolean>>
+  setUpdateEventList: Dispatch<SetStateAction<boolean>>
 }
 
 const selectData = [
@@ -23,7 +24,7 @@ const selectData = [
   { id: 'slateBlue', label: 'Slate blue' }
 ]
 
-const CreateEvent: React.FC<CreateEventProps> = ({ openModal, setOpenModal }) => {
+const CreateEvent: React.FC<CreateEventProps> = ({ openModal, setOpenModal, setUpdateEventList }) => {
   const { createEvent } = useRealm()
   const [isLoading, setLoading] = useState<boolean>(false)
   const { control, handleSubmit } = useForm<EventFormProps>({
@@ -44,6 +45,7 @@ const CreateEvent: React.FC<CreateEventProps> = ({ openModal, setOpenModal }) =>
         dateTime
       }
       await createEvent(payload)
+      setUpdateEventList(true)
       setOpenModal(false)
     } catch (err) {
       console.log(err)

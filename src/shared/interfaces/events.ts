@@ -1,3 +1,5 @@
+import React, { SetStateAction } from 'react'
+
 export interface EventFormProps {
   name: string
   colorCard: string
@@ -6,6 +8,8 @@ export interface EventFormProps {
   place: string
   index?: number
   description?: string
+  done?: boolean
+  dateTime?: Date
 }
 
 export interface EventsProps {
@@ -13,8 +17,10 @@ export interface EventsProps {
   colorCard: string
   dateTime: Date
   place: string
-  index?: number
+  index: number
   description?: string
   isCalendar?: boolean
-  done?: boolean
+  done: boolean
+  setEventAsDone?: (index: number, value: boolean) => void
+  setUpdateEventList?: React.Dispatch<SetStateAction<boolean>>
 }

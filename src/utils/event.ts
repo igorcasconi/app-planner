@@ -1,3 +1,5 @@
+import { EventsProps } from 'src/shared/interfaces/events'
+
 export const data = [
   {
     name: 'Reunião Formatura',
@@ -30,3 +32,8 @@ export const data = [
     place: 'Discord'
   }
 ]
+
+export const eventsToJSON = (realmObject?: Realm.Results<Realm.Object>) => {
+  if (!realmObject) return []
+  return realmObject.toJSON() as EventsProps[]
+}
