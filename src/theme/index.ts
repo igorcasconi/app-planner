@@ -10,6 +10,7 @@ export default {
     pink: '#E34280',
     slateBlue: '#6A5ACD',
     gray99: '#fcfcfc',
-    greenCheck: '#41c92c'
+    greenCheck: '#41c92c',
+    black: '#000000'
   }
 }

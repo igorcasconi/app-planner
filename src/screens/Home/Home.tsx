@@ -40,7 +40,7 @@ const Home: React.FC = () => {
     else indexNextDate = 0
 
     eventListRef.current?.scrollToIndex({ animated: true, index: indexNextDate, viewOffset: 1 })
-  }, [eventData])
+  }, [])
 
   const scrollToIndexFailed = (error: ScrollErrorProps) => {
     const offset = error.averageItemLength * error.index
@@ -100,25 +100,26 @@ const Home: React.FC = () => {
           </Text>
         </Row>
       </GradientView>
-      {eventData?.length ? (
-        <FlatList
-          data={eventData}
-          keyExtractor={(item, index) => `${item.name}-${index}`}
-          ref={eventListRef}
-          renderItem={({ item }: { item: EventsProps }) => (
-            <EventCard item={{ ...item, setEventAsDone, setUpdateEventList }} />
-          )}
-          initialNumToRender={20}
-          onScrollToIndexFailed={scroll => scrollToIndexFailed(scroll)}
-        />
-      ) : (
-        <Column width={1} height='100%' alignItems='center' mt={60} px={50}>
-          <MaterialCommunityIcons name='calendar-check' color={getThemeColors('veryDarkGray')} size={100} />
-          <Text fontSize={16} color='veryDarkGray' textAlign='center'>
-            Não tem nenhum evento cadastrado para esse dia!
-          </Text>
-        </Column>
-      )}
+      <Column width={1} height='100%'>
+        {eventData?.length ? (
+          <FlatList
+            data={eventData}
+            keyExtractor={(item, index) => `${item.name}-${index}`}
+            ref={eventListRef}
+            renderItem={({ item, index }: { item: EventsProps; index: number }) => (
+              <EventCard item={{ ...item, setEventAsDone, setUpdateEventList }} indexList={index} />
+            )}
+            onScrollToIndexFailed={scroll => scrollToIndexFailed(scroll)}
+          />
+        ) : (
+          <Column width={1} height='100%' alignItems='center' mt={60} px={50}>
+            <MaterialCommunityIcons name='calendar-check' color={getThemeColors('veryDarkGray')} size={100} />
+            <Text fontSize={16} color='veryDarkGray' textAlign='center'>
+              Não tem nenhum evento cadastrado para esse dia!
+            </Text>
+          </Column>
+        )}
+      </Column>
 
       <CreateEvent openModal={openModal} setOpenModal={setOpenModal} setUpdateEventList={setUpdateEventList} />
     </Column>
