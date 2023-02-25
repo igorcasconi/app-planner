@@ -1,4 +1,5 @@
 import React, { SetStateAction } from 'react'
+import { NavigationProp } from '@react-navigation/native'
 
 export interface EventFormProps {
   name: string

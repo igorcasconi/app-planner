@@ -12,6 +12,7 @@ interface ContextProps {
   getNextIndex: () => number
   getCurrentEventsOfDay: (day: Date | null) => EventsProps[]
   setEventAsDone: (index: number, value: boolean) => void
+  getEventDetail: (index: number) => EventsProps
 }
 
 const RealmContext = createContext<ContextProps>({} as ContextProps)
@@ -71,6 +72,13 @@ const RealmProvider: React.FC = ({ children }) => {
     return currentEventDay
   }
 
+  const getEventDetail = (index: number) => {
+    if (!index) return {} as EventsProps
+    const events = eventsToJSON(realm?.objects('Event'))
+    const eventDetailWithIndex = events?.filter(event => event.index === index)
+    return eventDetailWithIndex[0]
+  }
+
   return (
     <RealmContext.Provider
       value={{
@@ -78,7 +86,8 @@ const RealmProvider: React.FC = ({ children }) => {
         createEvent,
         getNextIndex,
         getCurrentEventsOfDay,
-        setEventAsDone
+        setEventAsDone,
+        getEventDetail
       }}
     >
       {children}

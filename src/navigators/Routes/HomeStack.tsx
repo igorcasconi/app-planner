@@ -1,12 +1,14 @@
 import React from 'react'
 import { createStackNavigator, StackNavigationOptions } from '@react-navigation/stack'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-
-import { Home, Calendar } from 'src/screens'
-import { Button, GradientView, Row, Text } from 'src/components'
 import { useNavigation } from '@react-navigation/native'
 
-const Stack = createStackNavigator()
+import { Home, Calendar, Event } from 'src/screens'
+import { Button, GradientView, Text } from 'src/components'
+
+import { HomeStackRoutesParams } from 'src/shared/types/routes'
+
+const Stack = createStackNavigator<HomeStackRoutesParams>()
 
 const HeaderBackground = () => (
   <GradientView
@@ -45,6 +47,11 @@ const HomeSack = () => (
       name='Calendar'
       component={Calendar}
       options={{ ...options, headerTitle: () => HeaderText('Calendário') }}
+    />
+    <Stack.Screen
+      name='Event'
+      component={Event}
+      options={{ ...options, headerTitle: () => HeaderText('Detalhes do Evento') }}
     />
   </Stack.Navigator>
 )
