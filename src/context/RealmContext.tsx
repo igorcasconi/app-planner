@@ -13,6 +13,7 @@ interface ContextProps {
   getCurrentEventsOfDay: (day: Date | null) => EventsProps[]
   setEventAsDone: (index: number, value: boolean) => void
   getEventDetail: (index: number) => EventsProps
+  editEvent: (index: number, payload?: EventFormProps) => void
 }
 
 const RealmContext = createContext<ContextProps>({} as ContextProps)
@@ -65,6 +66,28 @@ const RealmProvider: React.FC = ({ children }) => {
     })
   }
 
+  const editEvent = (index: number, payload?: EventFormProps) => {
+    if (!payload) return
+    const realmObject = realm?.objects('Event')
+    const events = eventsToJSON(realmObject)
+    if (!events?.length) return
+
+    const eventIndex = events.findIndex((event: EventsProps) => event.index === index)
+
+    realm?.write(() => {
+      //@ts-ignore
+      realmObject[eventIndex].name = payload.name
+      //@ts-ignore
+      realmObject[eventIndex].description = payload?.description
+      //@ts-ignore
+      realmObject[eventIndex].dateTime = payload?.dateTime
+      //@ts-ignore
+      realmObject[eventIndex].place = payload?.place
+      //@ts-ignore
+      realmObject[eventIndex].colorCard = payload?.colorCard
+    })
+  }
+
   const getCurrentEventsOfDay = (day: Date | null) => {
     if (!day) return []
     const events = eventsToJSON(realm?.objects('Event'))
@@ -87,7 +110,8 @@ const RealmProvider: React.FC = ({ children }) => {
         getNextIndex,
         getCurrentEventsOfDay,
         setEventAsDone,
-        getEventDetail
+        getEventDetail,
+        editEvent
       }}
     >
       {children}

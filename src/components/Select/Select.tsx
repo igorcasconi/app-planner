@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { Keyboard, FlatList } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
 import { Text } from '../Text'
@@ -6,7 +7,6 @@ import { Row } from '../Row'
 import { Props as ColumnProps, Column } from '../Column'
 import { Alert } from '../Alert'
 import { Button } from '../Button'
-import { FlatList } from 'react-native'
 import styled from 'styled-components/native'
 
 type SelectDataProps = { id: string | number; label: string }
@@ -16,9 +16,17 @@ interface SelectProps {
   selectData: SelectDataProps[]
   onChange?: (value: string | number) => void
   errorMessage?: string
+  value: string | null
 }
 
-const Select: React.FC<ColumnProps & SelectProps> = ({ placeholder, selectData, onChange, errorMessage, ...props }) => {
+const Select: React.FC<ColumnProps & SelectProps> = ({
+  placeholder,
+  selectData,
+  onChange,
+  value,
+  errorMessage,
+  ...props
+}) => {
   const [openAlert, setOpenAlert] = useState<boolean>(false)
   const [selectedValue, selectValue] = useState<string | null>(null)
 
@@ -39,9 +47,24 @@ const Select: React.FC<ColumnProps & SelectProps> = ({ placeholder, selectData, 
     </Row>
   )
 
+  useEffect(() => {
+    if (!value) return
+
+    const foundStringValue = selectData.find(data => data.id === value)
+    selectValue(foundStringValue?.label ?? null)
+  }, [value])
+
   return (
     <Column width={1} position='relative'>
-      <Button width={1} p={0} ml='2px' onPress={() => setOpenAlert(true)}>
+      <Button
+        width={1}
+        p={0}
+        ml='2px'
+        onPress={() => {
+          Keyboard.dismiss()
+          setOpenAlert(true)
+        }}
+      >
         <Row
           width={1}
           height={40}
