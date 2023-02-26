@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import DatePicker from 'react-native-date-picker'
 import { Column } from '../Column'
 
@@ -35,6 +35,10 @@ const DatePickerComponent: React.FC<DatePickerProps> = ({
     setDate(date)
     onChangeDate && onChangeDate(date)
   }
+
+  useEffect(() => {
+    setDate(valueDate)
+  }, [valueDate])
 
   return (
     <Column width={1} {...props}>

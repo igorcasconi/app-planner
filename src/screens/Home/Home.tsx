@@ -1,12 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { FlatList } from 'react-native'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { compareDesc, isToday } from 'date-fns'
 
-import { Button, Column, GradientView, Row, Text, WeekCalendar } from 'src/components'
+import { Button, Column, GradientView, Row, Text, WeekCalendar, CreateEditEvent } from 'src/components'
 import { EventCard } from 'src/components/EventCard'
-import CreateEvent from './CreateEvent'
 
 import { EventsProps } from 'src/shared/interfaces/events'
 import { useRealm } from 'src/context/RealmContext'
@@ -21,12 +20,13 @@ const Home: React.FC = () => {
   const [selectedDay, selectDay] = useState<Date | null>(null)
   const eventListRef = useRef<FlatList>(null)
   const [updateEventList, setUpdateEventList] = useState<boolean>(false)
+  const isFocused = useIsFocused()
 
   const eventData = useMemo(() => {
     const events = getCurrentEventsOfDay(selectedDay)
     setUpdateEventList(false)
     return events
-  }, [selectedDay, updateEventList])
+  }, [selectedDay, updateEventList, isFocused])
 
   const scrollToNextItem = useCallback(() => {
     if (!selectedDay) return
@@ -121,7 +121,7 @@ const Home: React.FC = () => {
         )}
       </Column>
 
-      <CreateEvent openModal={openModal} setOpenModal={setOpenModal} setUpdateEventList={setUpdateEventList} />
+      <CreateEditEvent openModal={openModal} setOpenModal={setOpenModal} setUpdateContent={setUpdateEventList} />
     </Column>
   )
 }

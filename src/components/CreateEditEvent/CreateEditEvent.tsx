@@ -1,5 +1,5 @@
 import { getHours, getMinutes, set } from 'date-fns'
-import React, { Dispatch, Fragment, SetStateAction, useState } from 'react'
+import React, { Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -10,10 +10,11 @@ import { useRealm } from 'src/context/RealmContext'
 import { EventFormProps } from 'src/shared/interfaces/events'
 import { EventSchema } from 'src/schemas/events'
 
-interface CreateEventProps {
+interface CreateEditEventProps {
   openModal: boolean
   setOpenModal: Dispatch<SetStateAction<boolean>>
-  setUpdateEventList: Dispatch<SetStateAction<boolean>>
+  setUpdateContent?: Dispatch<SetStateAction<boolean>>
+  eventIndex?: number
 }
 
 const selectData = [
@@ -24,10 +25,10 @@ const selectData = [
   { id: 'slateBlue', label: 'Slate blue' }
 ]
 
-const CreateEvent: React.FC<CreateEventProps> = ({ openModal, setOpenModal, setUpdateEventList }) => {
-  const { createEvent } = useRealm()
+const CreateEditEvent: React.FC<CreateEditEventProps> = ({ openModal, setOpenModal, setUpdateContent, eventIndex }) => {
+  const { createEvent, editEvent, getEventDetail } = useRealm()
   const [isLoading, setLoading] = useState<boolean>(false)
-  const { control, handleSubmit } = useForm<EventFormProps>({
+  const { control, handleSubmit, reset } = useForm<EventFormProps>({
     defaultValues: { name: '', date: new Date(), time: new Date() },
     resolver: yupResolver(EventSchema)
   })
@@ -44,8 +45,12 @@ const CreateEvent: React.FC<CreateEventProps> = ({ openModal, setOpenModal, setU
         ...values,
         dateTime
       }
-      await createEvent(payload)
-      setUpdateEventList(true)
+
+      if (eventIndex) {
+        await editEvent(eventIndex, payload)
+      } else await createEvent(payload)
+
+      setUpdateContent && setUpdateContent(true)
       setOpenModal(false)
     } catch (err) {
       console.log(err)
@@ -53,6 +58,14 @@ const CreateEvent: React.FC<CreateEventProps> = ({ openModal, setOpenModal, setU
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    if (!eventIndex) return
+
+    const eventData = getEventDetail(eventIndex)
+    const dateTime = eventData.dateTime
+    reset({ ...eventData, date: dateTime, time: dateTime })
+  }, [eventIndex])
 
   return (
     <Fragment>
@@ -68,7 +81,7 @@ const CreateEvent: React.FC<CreateEventProps> = ({ openModal, setOpenModal, setU
             <Controller
               name='name'
               control={control}
-              render={({ field: { onChange, onBlur }, fieldState: { error } }) => {
+              render={({ field: { onChange, onBlur, ...inputProps }, fieldState: { error } }) => {
                 return (
                   <Input
                     onBlur={onBlur}
@@ -77,6 +90,7 @@ const CreateEvent: React.FC<CreateEventProps> = ({ openModal, setOpenModal, setU
                     placeholder='Nome do evento'
                     ml='6px'
                     errorMessage={error?.message}
+                    {...inputProps}
                   />
                 )
               }}
@@ -87,8 +101,15 @@ const CreateEvent: React.FC<CreateEventProps> = ({ openModal, setOpenModal, setU
             <Controller
               name='place'
               control={control}
-              render={({ field: { onChange }, fieldState: { error } }) => (
-                <Input width={1} onChangeText={onChange} placeholder='Local' ml='6px' errorMessage={error?.message} />
+              render={({ field: { onChange, ...inputProps }, fieldState: { error } }) => (
+                <Input
+                  width={1}
+                  onChangeText={onChange}
+                  placeholder='Local'
+                  ml='6px'
+                  errorMessage={error?.message}
+                  {...inputProps}
+                />
               )}
             />
           </Row>
@@ -97,8 +118,8 @@ const CreateEvent: React.FC<CreateEventProps> = ({ openModal, setOpenModal, setU
             <Controller
               name='description'
               control={control}
-              render={({ field: { onChange } }) => (
-                <Input width={1} onChangeText={onChange} placeholder='Descrição (opcional)' ml='6px' />
+              render={({ field: { onChange, ...inputProps } }) => (
+                <Input width={1} onChangeText={onChange} placeholder='Descrição (opcional)' ml='6px' {...inputProps} />
               )}
             />
           </Row>
@@ -107,8 +128,8 @@ const CreateEvent: React.FC<CreateEventProps> = ({ openModal, setOpenModal, setU
             <Controller
               name='date'
               control={control}
-              render={({ field: { onChange, value } }) => (
-                <DatePicker ml='3px' valueDate={new Date(value)} onChangeDate={onChange} />
+              render={({ field: { onChange, value, ...inputProps } }) => (
+                <DatePicker ml='3px' valueDate={value} onChangeDate={onChange} {...inputProps} />
               )}
             />
           </Row>
@@ -117,8 +138,8 @@ const CreateEvent: React.FC<CreateEventProps> = ({ openModal, setOpenModal, setU
             <Controller
               name='time'
               control={control}
-              render={({ field: { onChange, value } }) => (
-                <DatePicker valueDate={new Date(value)} ml='3px' mode='time' onChangeDate={onChange} />
+              render={({ field: { onChange, value, ...inputProps } }) => (
+                <DatePicker valueDate={value} ml='3px' mode='time' onChangeDate={onChange} {...inputProps} />
               )}
             />
           </Row>
@@ -127,13 +148,14 @@ const CreateEvent: React.FC<CreateEventProps> = ({ openModal, setOpenModal, setU
             <Controller
               name='colorCard'
               control={control}
-              render={({ field: { onChange }, fieldState: { error } }) => (
+              render={({ field: { onChange, ...inputProps }, fieldState: { error } }) => (
                 <Select
                   ml='6px'
                   placeholder='Selecione a cor'
                   selectData={selectData}
                   onChange={onChange}
                   errorMessage={error?.message}
+                  {...inputProps}
                 />
               )}
             />
@@ -162,7 +184,7 @@ const CreateEvent: React.FC<CreateEventProps> = ({ openModal, setOpenModal, setU
               disabled={isLoading}
             >
               <Text fontSize={14} color='white'>
-                Criar evento
+                {eventIndex ? 'Editar evento' : 'Criar evento'}
               </Text>
             </Button>
           </Row>
@@ -172,4 +194,4 @@ const CreateEvent: React.FC<CreateEventProps> = ({ openModal, setOpenModal, setU
   )
 }
 
-export default CreateEvent
+export default CreateEditEvent
