@@ -100,7 +100,7 @@ const Home: React.FC = () => {
           </Text>
         </Row>
       </GradientView>
-      <Column width={1} height='100%'>
+      <Column width={1} flex={1}>
         {eventData?.length ? (
           <FlatList
             data={eventData}

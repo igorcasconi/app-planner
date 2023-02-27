@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Calendar, LocaleConfig, CalendarProps } from 'react-native-calendars'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
@@ -82,10 +82,18 @@ const styles = {
   borderRadius: 8
 }
 
+interface CalendarComponentProps extends CalendarProps {
+  selectDayChildren?: React.Dispatch<React.SetStateAction<string>>
+}
+
 const currentDay = format(new Date(), 'yyyy-MM-dd')
 
-const CalendarComponent: React.FC<CalendarProps> = ({ ...props }) => {
+const CalendarComponent: React.FC<CalendarComponentProps> = ({ selectDayChildren, ...props }) => {
   const [selectedDay, selectDay] = useState<string>(currentDay)
+
+  useEffect(() => {
+    selectDayChildren && selectDayChildren(selectedDay)
+  }, [selectedDay])
 
   return (
     <Calendar
