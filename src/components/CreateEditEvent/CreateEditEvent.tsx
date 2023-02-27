@@ -25,11 +25,13 @@ const selectData = [
   { id: 'slateBlue', label: 'Slate blue' }
 ]
 
+const defaultValuesForm = { name: '', date: new Date(), time: new Date(), colorCard: '' }
+
 const CreateEditEvent: React.FC<CreateEditEventProps> = ({ openModal, setOpenModal, setUpdateContent, eventIndex }) => {
   const { createEvent, editEvent, getEventDetail } = useRealm()
   const [isLoading, setLoading] = useState<boolean>(false)
   const { control, handleSubmit, reset } = useForm<EventFormProps>({
-    defaultValues: { name: '', date: new Date(), time: new Date() },
+    defaultValues: defaultValuesForm,
     resolver: yupResolver(EventSchema)
   })
 
@@ -52,6 +54,7 @@ const CreateEditEvent: React.FC<CreateEditEventProps> = ({ openModal, setOpenMod
 
       setUpdateContent && setUpdateContent(true)
       setOpenModal(false)
+      reset(defaultValuesForm)
     } catch (err) {
       console.log(err)
     } finally {
@@ -166,7 +169,10 @@ const CreateEditEvent: React.FC<CreateEditEventProps> = ({ openModal, setOpenMod
               backgroundColor='pink'
               height={35}
               p='8px'
-              onPress={() => setOpenModal(false)}
+              onPress={() => {
+                reset(defaultValuesForm)
+                setOpenModal(false)
+              }}
               disabled={isLoading}
             >
               <Text fontSize={14} color='white'>
