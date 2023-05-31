@@ -69,24 +69,43 @@ const Home: React.FC = () => {
             </Column>
             <Row height={20}>
               <Button
-                width={80}
-                height={40}
-                pt='10px'
+                width={90}
+                height={50}
                 backgroundColor='vividAzure'
+                justifyContent='center'
+                alignItems='center'
                 mr={10}
                 onPress={() => setOpenModal(!openModal)}
               >
-                <Text fontSize={12} lineHeight='12px' color='white' fontFamily='Nunito-SemiBold' textAlign='center'>
+                <Text
+                  fontSize={14}
+                  lineHeight='15px'
+                  mt='4px'
+                  color='white'
+                  fontFamily='Nunito-SemiBold'
+                  textAlign='center'
+                >
                   Adicionar evento
                 </Text>
               </Button>
               <Button
-                backgroundColor='lightGrey'
-                width={40}
-                height={40}
+                backgroundColor='pink'
+                width={50}
+                height={50}
+                mr={10}
+                justifyContent='center'
                 onPress={() => navigation.navigate('Calendar')}
               >
-                <MaterialCommunityIcons name='calendar-today' color='black' size={22} />
+                <MaterialCommunityIcons name='calendar-today' color='white' size={22} />
+              </Button>
+              <Button
+                backgroundColor='lightGrey'
+                width={50}
+                height={50}
+                justifyContent='center'
+                onPress={() => navigation.navigate('Settings')}
+              >
+                <MaterialCommunityIcons name='cog-outline' color='black' size={22} />
               </Button>
             </Row>
           </Row>

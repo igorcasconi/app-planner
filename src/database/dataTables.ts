@@ -11,3 +11,13 @@ export const EventSchema = {
     done: 'bool'
   }
 }
+
+export const CategoriesSchema = {
+  name: 'Categories',
+  properties: {
+    color: 'string',
+    name: 'string',
+    index: 'int',
+    text: 'string'
+  }
+}

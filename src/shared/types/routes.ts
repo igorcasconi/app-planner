@@ -6,6 +6,8 @@ export type HomeStackRoutesParams = {
   Event: {
     eventIndex: number
   }
+  Settings: undefined
+  CategoriesTag: undefined
 }
 
 export type EventRouteParams = RouteProp<HomeStackRoutesParams, 'Event'>
