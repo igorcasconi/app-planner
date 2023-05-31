@@ -7,6 +7,8 @@ import { Home, Calendar, Event } from 'src/screens'
 import { Button, GradientView, Text } from 'src/components'
 
 import { HomeStackRoutesParams } from 'src/shared/types/routes'
+import { Settings } from 'src/screens/Settings'
+import { CategoriesTag } from 'src/screens/Settings/CategoriesTag'
 
 const Stack = createStackNavigator<HomeStackRoutesParams>()
 
@@ -52,6 +54,16 @@ const HomeSack = () => (
       name='Event'
       component={Event}
       options={{ ...options, headerTitle: () => HeaderText('Detalhes do Evento') }}
+    />
+    <Stack.Screen
+      name='Settings'
+      component={Settings}
+      options={{ ...options, headerTitle: () => HeaderText('Preferências') }}
+    />
+    <Stack.Screen
+      name='CategoriesTag'
+      component={CategoriesTag}
+      options={{ ...options, headerTitle: () => HeaderText('Cores/Nomes das categorias') }}
     />
   </Stack.Navigator>
 )

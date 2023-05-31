@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, TouchableOpacityProps } from 'react-native'
-import { space, layout, color, ColorProps, SpaceProps, LayoutProps } from 'styled-system'
+import { space, layout, color, ColorProps, SpaceProps, LayoutProps, flexbox, FlexboxProps } from 'styled-system'
 import styled from 'styled-components/native'
 
 import { Loader } from '../Loader'
@@ -8,6 +8,7 @@ import { Loader } from '../Loader'
 type Props = SpaceProps &
   LayoutProps &
   ColorProps &
+  FlexboxProps &
   TouchableOpacityProps & {
     text?: string
     isLoading?: boolean
@@ -29,6 +30,7 @@ const Button = styled.TouchableOpacity`
   ${space}
   ${layout}
   ${color}
+  ${flexbox}
 `
 
 export default ButtonComponent
