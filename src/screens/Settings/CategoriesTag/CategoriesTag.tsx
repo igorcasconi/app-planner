@@ -93,31 +93,35 @@ const CategoriesTag: React.FC = () => {
             </Text>
           </Row>
           <Row>
-            <Button
-              backgroundColor='red'
-              width={40}
-              height={40}
-              mr={10}
-              justifyContent='center'
-              onPress={() => {
-                setIndexCategory(item.index)
-                setOpenAlert(true)
-              }}
-            >
-              <MaterialCommunityIcons name='trash-can-outline' color='white' size={22} />
-            </Button>
-            <Button
-              backgroundColor='vividAzure'
-              width={40}
-              height={40}
-              mr={10}
-              justifyContent='center'
-              onPress={() => {
-                onResetFields(item.index)
-              }}
-            >
-              <MaterialCommunityIcons name='pencil' color='white' size={22} />
-            </Button>
+            {!item.isDefault && (
+              <Fragment>
+                <Button
+                  backgroundColor='red'
+                  width={40}
+                  height={40}
+                  mr={10}
+                  justifyContent='center'
+                  onPress={() => {
+                    setIndexCategory(item.index)
+                    setOpenAlert(true)
+                  }}
+                >
+                  <MaterialCommunityIcons name='trash-can-outline' color='white' size={22} />
+                </Button>
+                <Button
+                  backgroundColor='vividAzure'
+                  width={40}
+                  height={40}
+                  mr={10}
+                  justifyContent='center'
+                  onPress={() => {
+                    onResetFields(item.index)
+                  }}
+                >
+                  <MaterialCommunityIcons name='pencil' color='white' size={22} />
+                </Button>
+              </Fragment>
+            )}
           </Row>
         </Row>
       </Fragment>

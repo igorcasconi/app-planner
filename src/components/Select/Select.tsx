@@ -9,7 +9,7 @@ import { Alert } from '../Alert'
 import { Button } from '../Button'
 import styled from 'styled-components/native'
 
-type SelectDataProps = { id: string | number; label: string }
+type SelectDataProps = { id: string | number; label: string; color?: string }
 
 interface SelectProps {
   placeholder?: string
@@ -34,7 +34,7 @@ const Select = React.forwardRef<RefObject<ViewProps>, ColumnProps & SelectProps>
       <Row width={1} height={45} mb='6px' borderBottomWidth='0.5px' borderBottomColor='lightGrey' alignItems='center'>
         <Button width={1} height='100%' backgroundColor='transparent' p={0} onPress={() => onChangeHandler(item)}>
           <Row width={1} height='100%' alignItems='center'>
-            <Column width='10px' height='10px' borderRadius={20} backgroundColor={item.id} mr='8px' />
+            <Column width='10px' height='10px' borderRadius={20} backgroundColor={item.color} mr='8px' />
             <Text fontSize={14}>{item.label}</Text>
           </Row>
         </Button>

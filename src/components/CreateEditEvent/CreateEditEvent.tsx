@@ -1,5 +1,5 @@
 import { getHours, getMinutes, set } from 'date-fns'
-import React, { Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react'
+import React, { Dispatch, Fragment, SetStateAction, useEffect, useState, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -17,18 +17,10 @@ interface CreateEditEventProps {
   eventIndex?: number
 }
 
-const selectData = [
-  { id: 'vividAzure', label: 'Vivid azure' },
-  { id: 'black', label: 'Black' },
-  { id: 'pink', label: 'Pink' },
-  { id: 'lightBlack', label: 'Light black' },
-  { id: 'slateBlue', label: 'Slate blue' }
-]
-
 const defaultValuesForm = { name: '', date: new Date(), time: new Date(), colorCard: '' }
 
 const CreateEditEvent: React.FC<CreateEditEventProps> = ({ openModal, setOpenModal, setUpdateContent, eventIndex }) => {
-  const { createEvent, editEvent, getEventDetail } = useRealm()
+  const { createEvent, editEvent, getEventDetail, getCategories } = useRealm()
   const [isLoading, setLoading] = useState<boolean>(false)
   const { control, handleSubmit, reset } = useForm<EventFormProps>({
     defaultValues: defaultValuesForm,
@@ -61,6 +53,11 @@ const CreateEditEvent: React.FC<CreateEditEventProps> = ({ openModal, setOpenMod
       setLoading(false)
     }
   }
+
+  const selectData = useMemo(() => {
+    const categories = getCategories()
+    return categories.map(category => ({ id: category.index, label: category.name, color: category.color }))
+  }, [])
 
   useEffect(() => {
     if (!eventIndex) return

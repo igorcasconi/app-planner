@@ -3,4 +3,10 @@ export interface CategoriesProps {
   color: string
   text: string
   index: number
+  isDefault?: boolean
+}
+
+export interface UserProps {
+  name: string
+  isRegistered: boolean
 }
