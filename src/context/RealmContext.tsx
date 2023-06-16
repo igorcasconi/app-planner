@@ -23,6 +23,7 @@ interface ContextProps {
   createInitialConfiguration: () => void
   createUser: (payload?: UserProps) => void
   getUserData: () => UserProps
+  getCategory: (index: number) => CategoriesProps
 }
 
 const RealmContext = createContext<ContextProps>({} as ContextProps)
@@ -31,7 +32,7 @@ const RealmProvider: React.FC = ({ children }) => {
   const [realm, setRealm] = useState<Realm | null>(null)
 
   useEffect(() => {
-    const realmDB = new Realm({ schema: [EventSchema, CategoriesSchema, UserSchema], schemaVersion: 11 })
+    const realmDB = new Realm({ schema: [EventSchema, CategoriesSchema, UserSchema], schemaVersion: 14 })
     setRealm(realmDB)
   }, [])
 
@@ -55,7 +56,7 @@ const RealmProvider: React.FC = ({ children }) => {
         dateTime: payload?.dateTime,
         place: payload?.place,
         alert: true,
-        colorCard: payload?.colorCard,
+        categoryId: payload?.categoryId,
         index: nextIndex,
         done: false
       })
@@ -109,7 +110,7 @@ const RealmProvider: React.FC = ({ children }) => {
       //@ts-ignore
       realmObject[eventIndex].place = payload?.place
       //@ts-ignore
-      realmObject[eventIndex].colorCard = payload?.colorCard
+      realmObject[eventIndex].categoryId = payload?.categoryId
     })
   }
 
@@ -143,9 +144,27 @@ const RealmProvider: React.FC = ({ children }) => {
 
   const deleteCategory = (index: number) => {
     const realmObject = realm?.objects('Categories')
-    const categories = stringRealmToArrayJSON<CategoriesProps>(realm?.objects('Categories'))
+    const eventsRealmObject = realm?.objects('Event')
+    const categories = stringRealmToArrayJSON<CategoriesProps>(realmObject)
+    const events = stringRealmToArrayJSON<EventsProps>(eventsRealmObject)
 
     if (!categories?.length) return
+
+    events?.forEach(event => {
+      if (event.categoryId === index) {
+        const updateEvent = {
+          name: event.name,
+          date: event.dateTime,
+          time: event.dateTime,
+          place: event.place,
+          description: event.description,
+          done: event.done,
+          dateTime: event.dateTime,
+          categoryId: categories[0].index
+        }
+        editEvent(event.index, updateEvent)
+      }
+    })
 
     const categoryIndex = categories.findIndex((category: CategoriesProps) => category.index === index)
     realm?.write(() => !!realmObject && realm?.delete(realmObject[categoryIndex]))
@@ -197,6 +216,13 @@ const RealmProvider: React.FC = ({ children }) => {
     return user[0]
   }
 
+  const getCategory = (index: number) => {
+    if (!index) return {} as CategoriesProps
+    const category = stringRealmToArrayJSON<CategoriesProps>(realm?.objects('Categories'))
+    const categoryWithIndex = category?.filter(categoryData => categoryData.index === index)
+    return categoryWithIndex[0]
+  }
+
   return (
     <RealmContext.Provider
       value={{
@@ -214,7 +240,8 @@ const RealmProvider: React.FC = ({ children }) => {
         editCategory,
         createInitialConfiguration,
         createUser,
-        getUserData
+        getUserData,
+        getCategory
       }}
     >
       {children}

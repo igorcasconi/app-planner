@@ -10,24 +10,40 @@ import { Text } from '../Text'
 import { Column } from '../Column'
 import { useUserConfig } from 'src/context'
 import { Button } from '../Button'
+import { useRealm } from 'src/context/RealmContext'
 
 import { EventsProps } from 'src/shared/interfaces/events'
-import { formatDateTZ } from 'src/utils'
 import { useColors } from 'src/hooks/useColors'
+import { formatDateTZ } from 'src/utils'
 
 const EventCard = ({ item, indexList }: { item: EventsProps; indexList: number }) => {
   const navigation = useNavigation()
   const { languageTag } = useUserConfig()
   const getThemeColors = useColors()
+  const { getCategory } = useRealm()
   const today = new Date()
 
-  const { setEventAsDone, colorCard, dateTime, description, name, place, done, index, isCalendar, setUpdateEventList } =
-    item
+  const {
+    setEventAsDone,
+    categoryId,
+    dateTime,
+    description,
+    name,
+    place,
+    done,
+    index,
+    isCalendar,
+    setUpdateEventList
+  } = item
+
+  const category = useMemo(() => {
+    const category = getCategory(categoryId)
+    return category
+  }, [categoryId])
 
   const backgroundColor = useMemo(() => {
     const timeHasPassed = compareAsc(today, dateTime)
-    const themeColor = getThemeColors(colorCard)
-    const color = timeHasPassed >= 1 && !isCalendar ? themeColor + 90 : themeColor
+    const color = timeHasPassed >= 1 && !isCalendar ? category.color + 90 : category.color
     return color
   }, [item])
 
@@ -45,24 +61,24 @@ const EventCard = ({ item, indexList }: { item: EventsProps; indexList: number }
           <Row width={1} paddingRight={20}>
             <Column width='70%'>
               <Row width={1} mb={1}>
-                <Text fontSize={22} numberOfLines={2} fontWeight={600} color='white'>
+                <Text fontSize={22} numberOfLines={2} fontWeight={600} color={category.text}>
                   {name}
                 </Text>
               </Row>
               <Row width={1} mt={1}>
-                <Text fontSize={16} color='white' numberOfLines={1}>
+                <Text fontSize={16} color={category.text} numberOfLines={1}>
                   {description}
                 </Text>
               </Row>
               <Row width={1} mt={1}>
                 <MaterialCommunityIcons name='clock' color={getThemeColors('lightGrey')} size={18} />
-                <Text fontSize={14} color='white' ml={1}>
+                <Text fontSize={14} color={category.text} ml={1}>
                   {dateTime && formatDateTZ(dateTime, 'HH:mm', languageTag)}
                 </Text>
               </Row>
               <Row width={1} mt={1}>
                 <MaterialCommunityIcons name='map-marker' color={getThemeColors('lightGrey')} size={18} />
-                <Text fontSize={14} color='white' ml={1}>
+                <Text fontSize={14} color={category.text} ml={1}>
                   {place}
                 </Text>
               </Row>
@@ -80,10 +96,10 @@ const EventCard = ({ item, indexList }: { item: EventsProps; indexList: number }
                 <Fragment>
                   <MaterialCommunityIcons
                     name={done ? 'checkbox-marked-circle-outline' : 'circle-outline'}
-                    color={getThemeColors(done ? 'greenCheck' : 'white')}
+                    color={done ? getThemeColors('greenCheck') : category.text}
                     size={40}
                   />
-                  <Text fontSize={16} color='white'>
+                  <Text fontSize={16} color={category.text}>
                     {done ? 'Concluído' : 'Não Feito'}
                   </Text>
                 </Fragment>

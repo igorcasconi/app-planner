@@ -1,5 +1,5 @@
 import { getHours, getMinutes, set } from 'date-fns'
-import React, { Dispatch, Fragment, SetStateAction, useEffect, useState, useMemo } from 'react'
+import React, { Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -9,6 +9,7 @@ import { useRealm } from 'src/context/RealmContext'
 
 import { EventFormProps } from 'src/shared/interfaces/events'
 import { EventSchema } from 'src/schemas/events'
+import { SelectDataProps } from 'src/shared/types/components'
 
 interface CreateEditEventProps {
   openModal: boolean
@@ -17,11 +18,12 @@ interface CreateEditEventProps {
   eventIndex?: number
 }
 
-const defaultValuesForm = { name: '', date: new Date(), time: new Date(), colorCard: '' }
+const defaultValuesForm = { name: '', date: new Date(), time: new Date(), categoryId: null }
 
 const CreateEditEvent: React.FC<CreateEditEventProps> = ({ openModal, setOpenModal, setUpdateContent, eventIndex }) => {
   const { createEvent, editEvent, getEventDetail, getCategories } = useRealm()
   const [isLoading, setLoading] = useState<boolean>(false)
+  const [selectData, setSelectData] = useState<SelectDataProps[]>([] as SelectDataProps[])
   const { control, handleSubmit, reset } = useForm<EventFormProps>({
     defaultValues: defaultValuesForm,
     resolver: yupResolver(EventSchema)
@@ -54,9 +56,14 @@ const CreateEditEvent: React.FC<CreateEditEventProps> = ({ openModal, setOpenMod
     }
   }
 
-  const selectData = useMemo(() => {
+  useEffect(() => {
     const categories = getCategories()
-    return categories.map(category => ({ id: category.index, label: category.name, color: category.color }))
+    const categoriesMapped = categories.map(category => ({
+      id: category.index,
+      label: category.name,
+      color: category.color
+    }))
+    setSelectData(categoriesMapped)
   }, [])
 
   useEffect(() => {
@@ -146,7 +153,7 @@ const CreateEditEvent: React.FC<CreateEditEventProps> = ({ openModal, setOpenMod
           <Row width={1} alignItems='center' pr={30} mt={20}>
             <Ionicons name='color-palette-outline' size={24} />
             <Controller
-              name='colorCard'
+              name='categoryId'
               control={control}
               render={({ field: { onChange, ...inputProps }, fieldState: { error } }) => (
                 <Select
@@ -182,7 +189,7 @@ const CreateEditEvent: React.FC<CreateEditEventProps> = ({ openModal, setOpenMod
               height={35}
               ml={16}
               p='8px'
-              onPress={handleSubmit(onSubmit)}
+              onPress={handleSubmit(onSubmit, err => console.log(err))}
               isLoading={isLoading}
               disabled={isLoading}
             >

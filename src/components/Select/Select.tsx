@@ -1,22 +1,21 @@
 import React, { RefObject, useEffect, useState } from 'react'
 import { Keyboard, FlatList, ViewProps } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import styled from 'styled-components/native'
 
 import { Text } from '../Text'
 import { Row } from '../Row'
 import { Props as ColumnProps, Column } from '../Column'
 import { Alert } from '../Alert'
 import { Button } from '../Button'
-import styled from 'styled-components/native'
-
-type SelectDataProps = { id: string | number; label: string; color?: string }
+import { SelectDataProps } from 'src/shared/types/components'
 
 interface SelectProps {
   placeholder?: string
   selectData: SelectDataProps[]
   onChange?: (value: string | number) => void
   errorMessage?: string
-  value: string | null
+  value: string | number | null
 }
 
 const Select = React.forwardRef<RefObject<ViewProps>, ColumnProps & SelectProps>(
