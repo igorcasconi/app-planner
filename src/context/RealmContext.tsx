@@ -2,9 +2,9 @@ import { isSameDay } from 'date-fns'
 import React, { createContext, useState, useContext, useEffect } from 'react'
 import Realm from 'realm'
 
-import { EventSchema, CategoriesSchema } from 'src/database'
+import { EventSchema, CategoriesSchema, UserSchema } from 'src/database'
 import { EventFormProps, EventsProps } from 'src/shared/interfaces/events'
-import { CategoriesProps } from 'src/shared/interfaces/settings'
+import { CategoriesProps, UserProps } from 'src/shared/interfaces/settings'
 import { stringRealmToArrayJSON } from 'src/utils/event'
 
 interface ContextProps {
@@ -20,6 +20,9 @@ interface ContextProps {
   getCategories: () => CategoriesProps[]
   deleteCategory: (index: number) => void
   editCategory: (index: number, payload?: CategoriesProps) => void
+  createInitialConfiguration: () => void
+  createUser: (payload?: UserProps) => void
+  getUserData: () => UserProps
 }
 
 const RealmContext = createContext<ContextProps>({} as ContextProps)
@@ -28,7 +31,7 @@ const RealmProvider: React.FC = ({ children }) => {
   const [realm, setRealm] = useState<Realm | null>(null)
 
   useEffect(() => {
-    const realmDB = new Realm({ schema: [EventSchema, CategoriesSchema], schemaVersion: 9 })
+    const realmDB = new Realm({ schema: [EventSchema, CategoriesSchema, UserSchema], schemaVersion: 11 })
     setRealm(realmDB)
   }, [])
 
@@ -69,7 +72,8 @@ const RealmProvider: React.FC = ({ children }) => {
         name: payload.name,
         color: payload.color,
         text: payload.text,
-        index: nextIndex
+        index: nextIndex,
+        isDefault: payload?.isDefault ?? false
       })
     })
   }
@@ -165,6 +169,34 @@ const RealmProvider: React.FC = ({ children }) => {
     })
   }
 
+  const createInitialConfiguration = () => {
+    const payloadCategory: CategoriesProps = {
+      name: 'Evento',
+      color: '#0000ff',
+      text: '#FFFFFF',
+      index: 0,
+      isDefault: true
+    }
+
+    createCategory(payloadCategory)
+  }
+
+  const createUser = (payload?: UserProps) => {
+    if (!payload) return
+
+    return realm?.write(() => {
+      realm.create('User', {
+        name: payload.name,
+        isRegistered: true
+      })
+    })
+  }
+
+  const getUserData = () => {
+    const user = stringRealmToArrayJSON<UserProps>(realm?.objects('User'))
+    return user[0]
+  }
+
   return (
     <RealmContext.Provider
       value={{
@@ -179,7 +211,10 @@ const RealmProvider: React.FC = ({ children }) => {
         createCategory,
         getCategories,
         deleteCategory,
-        editCategory
+        editCategory,
+        createInitialConfiguration,
+        createUser,
+        getUserData
       }}
     >
       {children}

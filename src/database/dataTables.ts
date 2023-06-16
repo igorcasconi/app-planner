@@ -18,6 +18,15 @@ export const CategoriesSchema = {
     color: 'string',
     name: 'string',
     index: 'int',
-    text: 'string'
+    text: 'string',
+    isDefault: { type: 'bool', optional: true }
+  }
+}
+
+export const UserSchema = {
+  name: 'User',
+  properties: {
+    name: 'string',
+    isRegistered: 'bool'
   }
 }
