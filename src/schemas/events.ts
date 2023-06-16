@@ -6,11 +6,13 @@ Yup.setLocale({
   }
 })
 
-export const EventSchema = Yup.object().shape({
-  name: Yup.string().required(),
-  place: Yup.string().required(),
-  description: Yup.string(),
-  date: Yup.date().required(),
-  time: Yup.date().required(),
-  colorCard: Yup.string().required()
-}).required()
+export const EventSchema = Yup.object()
+  .shape({
+    name: Yup.string().required(),
+    place: Yup.string().required(),
+    description: Yup.string(),
+    date: Yup.date().required(),
+    time: Yup.date().required(),
+    categoryId: Yup.number().required()
+  })
+  .required()

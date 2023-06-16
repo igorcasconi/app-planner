@@ -1,9 +1,8 @@
 import React, { SetStateAction } from 'react'
-import { NavigationProp } from '@react-navigation/native'
 
 export interface EventFormProps {
   name: string
-  colorCard: string
+  categoryId: number | null
   date: Date
   time: Date
   place: string
@@ -15,7 +14,7 @@ export interface EventFormProps {
 
 export interface EventsProps {
   name: string
-  colorCard: string
+  categoryId: number
   dateTime: Date
   place: string
   index: number

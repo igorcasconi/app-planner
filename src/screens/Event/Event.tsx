@@ -15,7 +15,7 @@ const Event: React.FC = () => {
   const [openAlertDelete, setOpenAlertDelete] = useState<boolean>(false)
   const getThemeColors = useColors()
   const route = useRoute<EventRouteParams>()
-  const { getEventDetail, setEventAsDone, deleteEvent } = useRealm()
+  const { getEventDetail, setEventAsDone, deleteEvent, getCategory } = useRealm()
   const navigation = useNavigation()
   const { eventIndex } = route.params
 
@@ -26,6 +26,11 @@ const Event: React.FC = () => {
     setUpdateEventDetail(false)
     return { ...eventData, date, hour }
   }, [eventIndex, updateEventDetail])
+
+  const category = useMemo(() => {
+    const category = getCategory(eventDetail.categoryId)
+    return category
+  }, [eventDetail])
 
   const deleteEventHandler = async () => {
     try {
@@ -44,16 +49,16 @@ const Event: React.FC = () => {
             <Column
               width='76%'
               height={30}
-              backgroundColor={eventDetail.colorCard}
+              backgroundColor={category.color}
               borderRadius={10}
               py={1}
               px={2}
               justifyContent='center'
               mt='4px'
             >
-              {/* <Text fontSize={14} color='white'>
-              Categoria
-            </Text> */}
+              <Text fontSize={14} color={category.text}>
+                {category.name}
+              </Text>
             </Column>
             <Button
               backgroundColor='lightGrey'

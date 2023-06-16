@@ -6,7 +6,7 @@ export const EventSchema = {
     dateTime: 'date',
     place: 'string',
     alert: 'bool',
-    colorCard: 'string',
+    categoryId: 'int',
     index: 'int',
     done: 'bool'
   }

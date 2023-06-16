@@ -251,13 +251,14 @@ const CategoriesTag: React.FC = () => {
           </StyleScrollView>
         </Column>
       </Modal>
-      <Alert openAlert={openAlert} height={200}>
+      <Alert openAlert={openAlert} height={400} padding={16}>
         <Column width={1} height='100%' justifyContent='center' alignItems='center'>
           <MaterialCommunityIcons name='trash-can-outline' color='red' size={70} />
-          <Text fontSize={22} color='veryDarkGray' mt={16}>
-            Deseja excluir essa categoria?
+          <Text fontSize={18} color='veryDarkGray' mt={16}>
+            Se existir eventos cadastrados com esta categoria, os mesmos eventos serão alterados para categoria padrão
+            do aplicativo. Deseja excluir essa categoria?
           </Text>
-          <Row width={1} justifyContent='center' mt={30}>
+          <Row width={1} justifyContent='center' mt={50}>
             <Button
               width={120}
               backgroundColor='veryDarkGray'

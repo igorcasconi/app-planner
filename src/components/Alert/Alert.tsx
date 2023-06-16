@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Dimensions } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue, withTiming, Easing } from 'react-native-reanimated'
 import styled, { css } from 'styled-components/native'
+import { space, color, layout } from 'styled-system'
 
 import { Props as ColumnProps } from '../Column'
 
@@ -75,6 +76,9 @@ const AlertContent = styled(Animated.View)(
     top: 0;
     border-radius: 16px;
     border: 1px solid ${theme.colors.lightGrey}
+    ${space}
+    ${color}
+    ${layout}
   `
 )
 
