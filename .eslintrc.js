@@ -36,5 +36,11 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^_', argsIgnorePattern: '^_' }],
     '@typescript-eslint/explicit-function-return-type': 'off',
     'react/jsx-fragments': 'off'
-  }
+  },
+  'prettier/prettier': [
+    'error',
+    {
+      endOfLine: 'auto'
+    }
+  ]
 }

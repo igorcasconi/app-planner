@@ -47,7 +47,7 @@ const Alert: React.FC<ColumnProps & AlertProps> = ({ children, openAlert, ...pro
 
   return isVisibleAlert ? (
     <Portal>
-      <AlertContainer>
+      <AlertContainer testID='alert'>
         <AlertContent {...props} style={styleAnimated}>
           {children}
         </AlertContent>
